@@ -14,3 +14,24 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+# Approach
+
+What exactly we need to do?
+
+=> From today to a year back, we have to display transactions done in every day of every day. 
+
+Data Structure to be used
+
+=> I can have a list of transaction object, containting the time of transaction, id, and amount spend.
+while building widgets for each day showing transaction I can pass a list of transactions objects of that day in widgets to view details per day on click.
+
+
+Dealing with UI
+
+=> for UI, I can use simple approach to put the first week  to last week of whole year, inside row(List(columns)) pattern.
+
+I will have to make sure that there are empty widgets or spaces in the start of first week and end of last week as per required. 
+
+
