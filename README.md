@@ -88,5 +88,9 @@ flutter pub get
 ```
 
 ```
-flutter pub run
+flutter run -d macos 
+```
+
+```
+flutter run 
 ```
