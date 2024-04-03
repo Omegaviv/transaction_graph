@@ -27,6 +27,18 @@ class SingleDayTransaction extends StatelessWidget {
           Radius.circular(borderRadius ?? 4),
         ),
       ),
+      child: Center(
+          child: Text(transactions.isNotEmpty
+              ? transactions.first.amount.toString()
+              : "NA")),
     );
+  }
+
+  double totalAmount() {
+    double sum = 0;
+    transactions.forEach((element) {
+      sum += element.amount;
+    });
+    return sum;
   }
 }

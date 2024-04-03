@@ -19,7 +19,7 @@ class TransactionGraph extends StatelessWidget {
 
   final DateTime? startDate;
   final DateTime? endDate;
-  final List<Transaction> transactionData;
+  final Map<DateTime, List<Transaction>> transactionData;
   final double? size;
   final double? fontSize;
   final double? margin;
@@ -73,7 +73,6 @@ class TransactionGraph extends StatelessWidget {
           ? today
           : aYearBack.copyWith(day: aYearBack.day + day + 7);
       int dayDifference = weekEndDate.difference(weekStartDate).inDays;
-
       weeks.add(Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -81,7 +80,14 @@ class TransactionGraph extends StatelessWidget {
             dayDifference < 7 ? dayDifference + 1 : dayDifference,
             (index) => SingleDayTransaction(
               date: weekStartDate.copyWith(day: weekStartDate.day + index),
-              transactions: const [],
+              transactions: transactionData[weekStartDate.copyWith(
+                      day: weekStartDate.day + index,
+                      hour: 0,
+                      minute: 0,
+                      microsecond: 0,
+                      second: 0,
+                      millisecond: 0)] ??
+                  [],
             ),
           ),
           if (dayDifference < 7)
@@ -117,7 +123,14 @@ class TransactionGraph extends StatelessWidget {
           7 - initialEmptyDays,
           (index) => SingleDayTransaction(
             date: startDate.copyWith(day: startDate.day + index),
-            transactions: const [],
+            transactions: transactionData[startDate.copyWith(
+                    day: startDate.day + index,
+                    hour: 0,
+                    minute: 0,
+                    microsecond: 0,
+                    second: 0,
+                    millisecond: 0)] ??
+                [],
           ),
         ),
       ],
