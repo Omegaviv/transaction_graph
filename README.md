@@ -28,7 +28,7 @@ Building Month Label UI
 I can display all the month, starting from the month of starte date object to all values in list.
 
 
-For displaying color and each day transaction spent, we can have a map<DateTime, List<Transaction>> object which will store transaction of each day. 
+For displaying color and each day transaction spent, we can have a Map<DateTime, List\<Transaction>> object which will store transaction of each day. 
 
 
 # How to use widget
