@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 class TransactionGraph extends StatelessWidget {
   const TransactionGraph(
       {super.key,
-      required this.onPressDay,
       required this.transactionData,
       this.startDate,
       this.endDate,
@@ -32,7 +31,6 @@ class TransactionGraph extends StatelessWidget {
   final Color? baseColor;
   final WeekLableVisiblityType weekLableVisiblityType;
   final MonthLabelVisiblityType monthLabelVisiblityType;
-  final Function(List<Transaction>, DateTime) onPressDay;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -60,7 +58,10 @@ class TransactionGraph extends StatelessWidget {
     );
   }
 
+  // Function to build all the week of year to show on UI
+  //
   List<Widget> _buildWeeks() {
+    // This holds list of columns, which will be later children of a row.
     List<Widget> weeks = [];
     DateTime today = startDate ?? DateTime.now();
     DateTime aYearBack = endDate ?? today.copyWith(year: today.year - 1);
@@ -68,6 +69,7 @@ class TransactionGraph extends StatelessWidget {
 
     int firstDay = aYearBack.weekday;
 
+    // max trancation amount in a day, later to be used for color shade to represent amount spent.
     double maxTransactionPerDay = 0;
     transactionData.forEach((key, value) {
       maxTransactionPerDay = max(
@@ -76,19 +78,26 @@ class TransactionGraph extends StatelessWidget {
               0.0, (previousValue, element) => previousValue + element.amount));
     });
 
+    // if the first day of week is not sunday, to calcualte empty boxes to how on the graph
     int startOfLoop = 0;
     if (firstDay != 7) {
       startOfLoop = 7 - firstDay;
 
+      // UI for first week of the year
       weeks.add(_firstWeek(firstDay, aYearBack, maxTransactionPerDay));
     }
 
+    // for the rest of the week
     for (int day = startOfLoop; day < totalDays; day += 7) {
+      // first day of selected week
       DateTime weekStartDate = aYearBack.copyWith(day: aYearBack.day + day);
+
+      // last day of selected week
       DateTime weekEndDate = (day >= totalDays - 7)
           ? today
           : aYearBack.copyWith(day: aYearBack.day + day + 7);
       int dayDifference = weekEndDate.difference(weekStartDate).inDays;
+
       weeks.add(Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -99,7 +108,8 @@ class TransactionGraph extends StatelessWidget {
               maxTransactionPerDay: maxTransactionPerDay,
               noTransactionColor: noTransactionColor,
               baseColor: baseColor,
-              onPress: onPressDay,
+
+              // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
               transactions: transactionData[weekStartDate.copyWith(
                       day: weekStartDate.day + index,
                       hour: 0,
@@ -110,6 +120,8 @@ class TransactionGraph extends StatelessWidget {
                   [],
             ),
           ),
+
+          // black days to fill
           if (dayDifference < 7)
             ...List.generate(
               7 - (dayDifference < 7 ? dayDifference + 1 : dayDifference),
@@ -130,6 +142,7 @@ class TransactionGraph extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // blank days, days not to display on UI
         ...List.generate(
           initialEmptyDays,
           (index) => Container(
@@ -139,7 +152,7 @@ class TransactionGraph extends StatelessWidget {
           ),
         ),
 
-        // rest days use increment to
+        // days to display on UI
         ...List.generate(
           7 - initialEmptyDays,
           (index) => SingleDayTransaction(
@@ -147,7 +160,8 @@ class TransactionGraph extends StatelessWidget {
             maxTransactionPerDay: maxTransactionPerDay,
             noTransactionColor: noTransactionColor,
             baseColor: baseColor,
-            onPress: onPressDay,
+
+            // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
             transactions: transactionData[startDate.copyWith(
                     day: startDate.day + index,
                     hour: 0,

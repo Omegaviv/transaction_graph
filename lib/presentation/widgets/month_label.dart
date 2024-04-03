@@ -27,6 +27,7 @@ class MonthLabel extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: labels
             .asMap()
+            // using asMap and Entreis to get index and value at the same time
             .entries
             .map(
               (e) => SizedBox(

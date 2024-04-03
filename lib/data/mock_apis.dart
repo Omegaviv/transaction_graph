@@ -1,5 +1,6 @@
 import 'package:card_transactions/domain/transaction.dart';
 
+// Gemerating mock data
 List<Transaction> generatedTransactions = List.generate(
     20,
     (index) => Transaction(
@@ -8,6 +9,7 @@ List<Transaction> generatedTransactions = List.generate(
         id: "${DateTime.now().copyWith(day: index)}$index"));
 
 class MockApi {
+  // Function to act a a api call, which will return list of transaction happed per day
   Future<Map<DateTime, List<Transaction>>> getTransactionByDateTime() async {
     Map<DateTime, List<Transaction>> data = {};
 

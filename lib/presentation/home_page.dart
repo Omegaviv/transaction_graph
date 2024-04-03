@@ -16,29 +16,35 @@ class _HomePageState extends State<HomePage> {
     final mockApi = MockApi();
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Card(
-            elevation: 20,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-              child: FutureBuilder<Map<DateTime, List<Transaction>>>(
-                  future: mockApi.getTransactionByDateTime(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      return const Text("Someting went wrong");
-                    }
-                    return TransactionGraph(
-                      transactionData: snapshot.data ?? {},
-                      onPressDay: (transactions, day) {
-                        print("the day clicked in $day");
-                        print(
-                            "total transaction that day is ${transactions.length}");
-                      },
-                    );
-                  }),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Center(
+                child: Card(
+                  elevation: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 17, horizontal: 20),
+                    // Dummy function to create mock data
+                    child: FutureBuilder<Map<DateTime, List<Transaction>>>(
+                        future: mockApi.getTransactionByDateTime(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError ||
+                              snapshot.data == null) {
+                            return const Text("Someting went wrong");
+                          }
+                          return TransactionGraph(
+                            transactionData: snapshot.data ?? {},
+                          );
+                        }),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
