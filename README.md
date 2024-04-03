@@ -1,31 +1,15 @@
 # card_transactions
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
 # Approach
 
 What exactly we need to do?
 
-=> From today to a year back, we have to display transactions done in every day of every day. 
+=> From today to a year back, we have to display transactions done of every day. 
 
 Data Structure to be used
 
 => I can have a list of transaction object, containting the time of transaction, id, and amount spend.
-while building widgets for each day showing transaction I can pass a list of transactions objects of that day in widgets to view details per day on click.
+while building widgets for each day showing transaction I can pass a list of transactions objects of that day in widgets, to view details per day with onClick.
 
 
 Dealing with UI
@@ -45,4 +29,54 @@ I can display all the month, starting from the month of starte date object to al
 
 
 For displaying color and each day transaction spent, we can have a map<DateTime, List<Transaction>> object which will store transaction of each day. 
+
+
+# How to use widget
+
+Use TransactionGraph widget, and pass your data. Here data has to be in form of Map<DateTime,List<Transaction>>>.
+
+Detail of Transaction object is present inside domain folder.
+
+```
+TransactionGraph(
+    transactionData: yourData,
+)
+```
+
+Currently in the code base, I have genreated List of Transaction objects then converted it to Map key value pare as per above.
+
+
+1) Start date and End date
+
+if nothing is passed it will conside end date as today and start date as one year back.
+
+```
+TransactionGraph(
+    transactionData: yourData,
+    startDate: DateTime,
+    endDate: DateTime
+)
+```
+
+2) You can also configure how week label and month labels are displayed
+
+```
+TransactionGraph(
+    transactionData: yourData,
+    weekLableVisiblityType: WeekLableVisiblityType.oddDays,
+    monthLabelVisiblityType: MonthLabelVisiblityType.short
+)
+```
+
+3) a few other thing you con configure is 
+
+    size => size of the box representing each day
+    fontSize
+    margin => margin of the box representing each day
+    baseColor => Color that will be used for muiltple shades of each day
+    noTransactionColor => color of the day if no transaction there
+
+
+
+
 

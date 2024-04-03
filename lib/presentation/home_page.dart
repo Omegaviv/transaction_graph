@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 17, horizontal: 20),
+
                     // Dummy function to create mock data
                     child: FutureBuilder<Map<DateTime, List<Transaction>>>(
                         future: mockApi.getTransactionByDateTime(),

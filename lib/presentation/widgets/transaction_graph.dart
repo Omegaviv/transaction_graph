@@ -12,7 +12,6 @@ class TransactionGraph extends StatelessWidget {
       {super.key,
       required this.transactionData,
       this.startDate,
-      this.endDate,
       this.size = 20,
       this.fontSize = 12,
       this.margin = 2,
@@ -22,7 +21,6 @@ class TransactionGraph extends StatelessWidget {
       this.monthLabelVisiblityType = MonthLabelVisiblityType.short});
 
   final DateTime? startDate;
-  final DateTime? endDate;
   final Map<DateTime, List<Transaction>> transactionData;
   final double? size;
   final double? fontSize;
@@ -33,38 +31,43 @@ class TransactionGraph extends StatelessWidget {
   final MonthLabelVisiblityType monthLabelVisiblityType;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MonthLabel(
-              startDate: startDate ?? DateTime.now(),
-              monthLabelVisiblityType: monthLabelVisiblityType,
-              fontSize: fontSize ?? 12),
-          Row(
-            children: [
-              WeekLabel(
-                weekLableVisiblityType: weekLableVisiblityType,
-                fontSize: fontSize ?? 12,
-                size: size ?? 20,
-                margin: margin ?? 2,
-              ),
-              ..._buildWeeks()
-            ],
-          ),
-        ],
+    final scrollController = ScrollController();
+    return Scrollbar(
+      controller: scrollController,
+      child: SingleChildScrollView(
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MonthLabel(
+                startDate: startDate ?? DateTime.now(),
+                monthLabelVisiblityType: monthLabelVisiblityType,
+                fontSize: fontSize ?? 12),
+            Row(
+              children: [
+                WeekLabel(
+                  weekLableVisiblityType: weekLableVisiblityType,
+                  fontSize: fontSize ?? 12,
+                  size: size ?? 20,
+                  margin: margin ?? 2,
+                ),
+                ..._buildWeeks()
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   // Function to build all the week of year to show on UI
-  //
+
   List<Widget> _buildWeeks() {
     // This holds list of columns, which will be later children of a row.
     List<Widget> weeks = [];
     DateTime today = startDate ?? DateTime.now();
-    DateTime aYearBack = endDate ?? today.copyWith(year: today.year - 1);
+    DateTime aYearBack = today.copyWith(year: today.year - 1);
     int totalDays = today.difference(aYearBack).inDays;
 
     int firstDay = aYearBack.weekday;

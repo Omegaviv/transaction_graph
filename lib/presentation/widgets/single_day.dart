@@ -41,8 +41,8 @@ class SingleDayTransaction extends StatelessWidget {
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ...transactions.map(
-                        (e) => Text("Spent ${e.amount}, Trans Id: ${e.id}"))
+                    ...transactions.map((e) => Text(
+                        "Spent \$${e.amount.round()}, Trans Id: ${e.id.substring(0, 7)}..."))
                   ],
                 ),
           actions: <Widget>[
