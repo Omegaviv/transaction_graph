@@ -34,7 +34,7 @@ class SingleDayTransaction extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(transactions.isEmpty
-              ? 'No transaction on this day'
+              ? 'No transaction on ${dateFormat()}'
               : 'Transactions of ${dateFormat()}'),
           content: transactions.isEmpty
               ? null

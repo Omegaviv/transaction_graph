@@ -1,11 +1,13 @@
+import 'dart:math';
+
 import 'package:card_transactions/domain/transaction.dart';
 
 // Gemerating mock data
 List<Transaction> generatedTransactions = List.generate(
-    20,
+    350,
     (index) => Transaction(
         time: DateTime.now().copyWith(day: DateTime.now().day - index),
-        amount: index * 2.0,
+        amount: Random().nextDouble() * 100 + 25,
         id: "${DateTime.now().copyWith(day: index)}$index"));
 
 class MockApi {
