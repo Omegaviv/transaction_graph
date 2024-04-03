@@ -35,3 +35,11 @@ Dealing with UI
 I will have to make sure that there are empty widgets or spaces in the start of first week and end of last week as per required. 
 
 
+Building Week lable UI
+
+I can provided 4 options as configure parameter of with main widget, to display none of the labels, to display all labels and even or odd indexed day.
+
+Building Month Label UI
+
+I can display all the month, starting from the month of starte date object to all values in list.
+

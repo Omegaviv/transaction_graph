@@ -1,10 +1,9 @@
-import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/domain/transaction.dart';
+import 'package:card_transactions/presentation/widgets/month_label.dart';
 import 'package:card_transactions/presentation/widgets/single_day.dart';
 import 'package:card_transactions/presentation/widgets/week_label.dart';
+import 'package:card_transactions/utils.dart';
 import 'package:flutter/material.dart';
-
-enum WeekLableVisiblityType { none, oddDays, evenDays, all }
 
 class TransactionGraph extends StatelessWidget {
   const TransactionGraph(
@@ -15,7 +14,8 @@ class TransactionGraph extends StatelessWidget {
       this.size = 20,
       this.fontSize = 12,
       this.margin = 2,
-      this.weekLableVisiblityType = WeekLableVisiblityType.all});
+      this.weekLableVisiblityType = WeekLableVisiblityType.all,
+      this.monthLabelVisiblityType = MonthLabelVisiblityType.short});
 
   final DateTime? startDate;
   final DateTime? endDate;
@@ -24,19 +24,29 @@ class TransactionGraph extends StatelessWidget {
   final double? fontSize;
   final double? margin;
   final WeekLableVisiblityType weekLableVisiblityType;
+  final MonthLabelVisiblityType monthLabelVisiblityType;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          WeekLabel(
-            weekLableVisiblityType: weekLableVisiblityType,
-            fontSize: fontSize ?? 12,
-            size: size ?? 20,
-            margin: margin ?? 2,
+          MonthLabel(
+              startDate: startDate ?? DateTime.now(),
+              monthLabelVisiblityType: monthLabelVisiblityType,
+              fontSize: fontSize ?? 12),
+          Row(
+            children: [
+              WeekLabel(
+                weekLableVisiblityType: weekLableVisiblityType,
+                fontSize: fontSize ?? 12,
+                size: size ?? 20,
+                margin: margin ?? 2,
+              ),
+              ..._buildWeeks()
+            ],
           ),
-          ..._buildWeeks()
         ],
       ),
     );
@@ -80,8 +90,7 @@ class TransactionGraph extends StatelessWidget {
               (index) => Container(
                 height: 20,
                 width: 20,
-                color: Colors.grey,
-                margin: const EdgeInsets.all(2),
+                margin: EdgeInsets.all(margin ?? 2),
               ),
             ),
         ],
@@ -99,8 +108,7 @@ class TransactionGraph extends StatelessWidget {
           (index) => Container(
             height: 20,
             width: 20,
-            color: Colors.grey,
-            margin: const EdgeInsets.all(2),
+            margin: EdgeInsets.all(margin ?? 2),
           ),
         ),
 

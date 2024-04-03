@@ -1,5 +1,5 @@
 import 'package:card_transactions/constants.dart';
-import 'package:card_transactions/presentation/widgets/transaction_graph.dart';
+import 'package:card_transactions/utils.dart';
 import 'package:flutter/material.dart';
 
 class WeekLabel extends StatelessWidget {
