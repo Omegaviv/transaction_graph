@@ -79,4 +79,14 @@ TransactionGraph(
 
 
 
+# How to run 
 
+I used flutter 3.19.3, you can use other version with suitable sdk versions.
+
+```
+flutter pub get
+```
+
+```
+flutter pub run
+```
