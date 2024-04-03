@@ -31,6 +31,11 @@ class _HomePageState extends State<HomePage> {
                     }
                     return TransactionGraph(
                       transactionData: snapshot.data ?? {},
+                      onPressDay: (transactions, day) {
+                        print("the day clicked in $day");
+                        print(
+                            "total transaction that day is ${transactions.length}");
+                      },
                     );
                   }),
             ),

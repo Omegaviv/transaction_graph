@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 class Constants {
   static const List<String> WEEK_LABEL = [
     'Sun',
@@ -38,4 +42,7 @@ class Constants {
     'November',
     'December',
   ];
+
+  static Color NO_TRANSACTION_COLOR = Colors.white.withOpacity(0.6);
+  static Color BRAND_COLOR = const Color(0xFFcb5019);
 }

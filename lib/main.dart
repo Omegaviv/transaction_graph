@@ -1,3 +1,4 @@
+import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Constants.BRAND_COLOR),
         useMaterial3: true,
       ),
       home: const HomePage(),
