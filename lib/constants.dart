@@ -43,6 +43,15 @@ class Constants {
     'December',
   ];
 
+  static const DUMMY_NAMES = [
+    "Adidas",
+    "Vivek Verma",
+    "Starbucks",
+    "Dropboc",
+    "AirBnb",
+    "Luffy"
+  ];
+
   static Color NO_TRANSACTION_COLOR = Colors.white.withOpacity(0.6);
   static Color BRAND_COLOR = const Color(0xFFcb5019);
 }

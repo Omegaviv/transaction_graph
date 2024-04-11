@@ -1,6 +1,9 @@
 import 'package:card_transactions/constants.dart';
+import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/domain/transaction.dart';
+import 'package:card_transactions/presentation/transaction_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SingleDayTransaction extends StatelessWidget {
   final DateTime date;
@@ -24,45 +27,14 @@ class SingleDayTransaction extends StatelessWidget {
       this.size,
       this.margin,
       this.borderRadius});
-  String dateFormat() {
-    return '${Constants.MONTH_LABEL[date.month - 1]} ${date.day}';
-  }
-
-  void _showTooltipPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(transactions.isEmpty
-              ? 'No transaction on ${dateFormat()}'
-              : 'Transactions of ${dateFormat()}'),
-          content: transactions.isEmpty
-              ? null
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ...transactions.map((e) => Text(
-                        "Spent \$${e.amount.round()}, Trans Id: ${e.id.substring(0, 7)}..."))
-                  ],
-                ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
+    final transactionController = Get.find<TransactionController>();
     return GestureDetector(
       onTap: () {
-        _showTooltipPopup(context);
+        transactionController.updateSelecedDate(date);
+        Get.to(const Transactionpage());
       },
       child: Container(
         height: size ?? 20,

@@ -1,19 +1,15 @@
-import 'package:card_transactions/data/mock_apis.dart';
+import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/domain/transaction.dart';
 import 'package:card_transactions/presentation/widgets/transaction_graph.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
-    final mockApi = MockApi();
+    final transactionController = Get.put(TransactionController());
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -29,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
                     // Dummy function to create mock data
                     child: FutureBuilder<Map<DateTime, List<Transaction>>>(
-                        future: mockApi.getTransactionByDateTime(),
+                        future: transactionController.getTransactions(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
