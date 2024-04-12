@@ -1,4 +1,5 @@
 import 'package:card_transactions/constants.dart';
+import 'package:card_transactions/data/mock_apis.dart';
 import 'package:card_transactions/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -17,7 +18,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Constants.BRAND_COLOR),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: HomePage(
+        repository: MockApi(),
+      ),
     );
   }
 }

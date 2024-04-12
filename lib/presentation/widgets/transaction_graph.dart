@@ -107,19 +107,20 @@ class TransactionGraph extends StatelessWidget {
           ...List.generate(
             dayDifference < 7 ? dayDifference + 1 : dayDifference,
             (index) => SingleDayTransaction(
+              key: Key(DateFormaters.toDDMMMYYYYObject(
+                      weekStartDate.copyWith(day: weekStartDate.day + index))
+                  .toString()),
               date: weekStartDate.copyWith(day: weekStartDate.day + index),
               maxTransactionPerDay: maxTransactionPerDay,
               noTransactionColor: noTransactionColor,
               baseColor: baseColor,
 
               // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
-              transactions: transactionData[weekStartDate.copyWith(
+              transactions: transactionData[DateFormaters.toDDMMMYYYYObject(
+                    weekStartDate.copyWith(
                       day: weekStartDate.day + index,
-                      hour: 0,
-                      minute: 0,
-                      microsecond: 0,
-                      second: 0,
-                      millisecond: 0)] ??
+                    ),
+                  )] ??
                   [],
             ),
           ),
@@ -159,19 +160,19 @@ class TransactionGraph extends StatelessWidget {
         ...List.generate(
           7 - initialEmptyDays,
           (index) => SingleDayTransaction(
+            key: Key(DateFormaters.toDDMMMYYYYObject(
+                    startDate.copyWith(day: startDate.day + index))
+                .toString()),
             date: startDate.copyWith(day: startDate.day + index),
             maxTransactionPerDay: maxTransactionPerDay,
             noTransactionColor: noTransactionColor,
             baseColor: baseColor,
 
             // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
-            transactions: transactionData[startDate.copyWith(
-                    day: startDate.day + index,
-                    hour: 0,
-                    minute: 0,
-                    microsecond: 0,
-                    second: 0,
-                    millisecond: 0)] ??
+            transactions: transactionData[
+                    DateFormaters.toDDMMMYYYYObject(startDate.copyWith(
+                  day: startDate.day + index,
+                ))] ??
                 [],
           ),
         ),

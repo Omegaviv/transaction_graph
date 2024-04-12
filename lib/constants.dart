@@ -54,4 +54,10 @@ class Constants {
 
   static Color NO_TRANSACTION_COLOR = Colors.white.withOpacity(0.6);
   static Color BRAND_COLOR = const Color(0xFFcb5019);
+
+  // keys
+
+  static const String FULL_DISPLAY_DATE = 'displayed-ful-date';
+  static const String TOTAL_AMOUNT = 'total-amount';
+  static const String GRAPH_Widget = 'graph-widget';
 }

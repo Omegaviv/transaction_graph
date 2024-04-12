@@ -1,3 +1,4 @@
+import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/data/mock_apis.dart';
 import 'package:card_transactions/domain/transaction.dart';
@@ -6,12 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.repository});
 
+  final MockApi repository;
   @override
   Widget build(BuildContext context) {
     final transactionController =
-        Get.put(TransactionController(mockApi: MockApi()));
+        Get.put(TransactionController(mockApi: repository));
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -38,6 +40,7 @@ class HomePage extends StatelessWidget {
                           }
                           return TransactionGraph(
                             transactionData: snapshot.data ?? {},
+                            key: const Key(Constants.GRAPH_Widget),
                           );
                         }),
                   ),

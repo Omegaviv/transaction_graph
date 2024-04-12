@@ -2,21 +2,16 @@ import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/domain/transaction.dart';
 import 'package:card_transactions/presentation/widgets/transaction_widget.dart';
+import 'package:card_transactions/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Transactionpage extends StatelessWidget {
-  const Transactionpage({super.key});
-
-  String dateFormat(DateTime date) {
-    return '${date.day} ${Constants.SHORT_MONTH_LABEL[date.month - 1]} ${date.year}';
-  }
-
+  const Transactionpage({super.key, required this.transactions});
+  final List<Transaction> transactions;
   @override
   Widget build(BuildContext context) {
     final transactionController = Get.find<TransactionController>();
-    final List<Transaction> transactions =
-        transactionController.getTransactionSelectedDate();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -33,14 +28,18 @@ class Transactionpage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  dateFormat(transactionController.selectedDate.value),
+                  DateFormaters.toDDMMMYYYY(
+                      transactionController.selectedDate.value),
                   style: const TextStyle(
                       color: Colors.grey, fontWeight: FontWeight.w500),
+                  key: const Key(Constants.FULL_DISPLAY_DATE),
                 ),
                 Text(
-                    "₹${transactionController.selectedDayTotal(transactions).toString()}",
-                    style: const TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.w500)),
+                  "₹${transactionController.selectedDayTotal(transactions).toString()}",
+                  style: const TextStyle(
+                      color: Colors.grey, fontWeight: FontWeight.w500),
+                  key: const Key(Constants.TOTAL_AMOUNT),
+                ),
               ],
             ),
             const Divider(),
@@ -57,6 +56,7 @@ class Transactionpage extends StatelessWidget {
                 itemCount: transactions.length,
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Padding(
+                    key: Key(transactions[index].id),
                     padding: const EdgeInsets.only(bottom: 5.0),
                     child: TransactonWidget(transaction: transactions[index]),
                   );
