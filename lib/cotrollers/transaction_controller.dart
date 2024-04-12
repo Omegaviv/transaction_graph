@@ -3,14 +3,10 @@ import 'package:card_transactions/domain/transaction.dart';
 import 'package:get/get.dart';
 
 class TransactionController extends GetxController {
-  late MockApi _mockApi;
+  late MockApi mockApi;
   Map<DateTime, List<Transaction>> transactions = {};
   var selectedDate = DateTime.now().obs;
-  @override
-  void onInit() {
-    super.onInit();
-    _mockApi = MockApi();
-  }
+  TransactionController({required this.mockApi});
 
   void updateSelecedDate(DateTime date) {
     selectedDate.value = date;
@@ -31,7 +27,7 @@ class TransactionController extends GetxController {
   }
 
   Future<Map<DateTime, List<Transaction>>> getTransactions() async {
-    transactions = await _mockApi.getTransactionByDateTime();
+    transactions = await mockApi.getTransactionByDateTime();
     return transactions;
   }
 }
