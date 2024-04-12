@@ -34,8 +34,12 @@ class SingleDayTransaction extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         transactionController.updateSelecedDate(date);
+        List<Transaction> transactions =
+            transactionController.getTransactionSelectedDate();
         Get.to(Transactionpage(
-          transactions: transactionController.getTransactionSelectedDate(),
+          transactions: transactions,
+          date: transactionController.selectedDate.value,
+          totalAmount: transactionController.selectedDayTotal(transactions),
         ));
       },
       child: Container(

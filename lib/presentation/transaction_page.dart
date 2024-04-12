@@ -1,17 +1,21 @@
 import 'package:card_transactions/constants.dart';
-import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/domain/transaction.dart';
 import 'package:card_transactions/presentation/widgets/transaction_widget.dart';
 import 'package:card_transactions/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Transactionpage extends StatelessWidget {
-  const Transactionpage({super.key, required this.transactions});
+  const Transactionpage({
+    super.key,
+    required this.transactions,
+    required this.date,
+    required this.totalAmount,
+  });
   final List<Transaction> transactions;
+  final DateTime date;
+  final double totalAmount;
   @override
   Widget build(BuildContext context) {
-    final transactionController = Get.find<TransactionController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -28,14 +32,13 @@ class Transactionpage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  DateFormaters.toDDMMMYYYY(
-                      transactionController.selectedDate.value),
+                  DateFormaters.toDDMMMYYYY(date),
                   style: const TextStyle(
                       color: Colors.grey, fontWeight: FontWeight.w500),
                   key: const Key(Constants.FULL_DISPLAY_DATE),
                 ),
                 Text(
-                  "₹${transactionController.selectedDayTotal(transactions).toString()}",
+                  "₹$totalAmount",
                   style: const TextStyle(
                       color: Colors.grey, fontWeight: FontWeight.w500),
                   key: const Key(Constants.TOTAL_AMOUNT),

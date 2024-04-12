@@ -2,6 +2,7 @@ import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/data/mock_apis.dart';
 import 'package:card_transactions/domain/transaction.dart';
 import 'package:card_transactions/presentation/home_page.dart';
+import 'package:card_transactions/presentation/transaction_page.dart';
 import 'package:card_transactions/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,6 +52,21 @@ void main() {
     );
   }
 
+  Widget testAppTransactionPage() {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Constants.BRAND_COLOR),
+        useMaterial3: true,
+      ),
+      home: Transactionpage(
+        transactions: listTransactions,
+        date: DateTime(2024, 1, 12),
+        totalAmount: 200,
+      ),
+    );
+  }
+
   testWidgets("Transaction graph widget found", (widgetTester) async {
     when(() => mockApi.getTransactionByDateTime())
         .thenAnswer((_) async => transactionsByDateTime);
@@ -89,6 +105,21 @@ void main() {
 
     for (var month in Constants.SHORT_MONTH_LABEL) {
       expect(find.text(month), findsOne);
+    }
+
+    for (var week in Constants.WEEK_LABEL) {
+      expect(find.text(week), findsOne);
+    }
+  });
+
+  testWidgets("Transactiop page", (widgetTester) async {
+    await widgetTester.pumpWidget(testAppTransactionPage());
+    await widgetTester.pump();
+
+    expect(find.text('Transactions'), findsOneWidget);
+
+    for (var transaction in listTransactions) {
+      expect(find.byKey(Key(transaction.id)), findsOneWidget);
     }
   });
 }
