@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:card_transactions/domain/transaction.dart';
+import 'package:card_transactions/presentation/widgets/custom_animation.dart';
 import 'package:card_transactions/presentation/widgets/month_label.dart';
 import 'package:card_transactions/presentation/widgets/single_day.dart';
 import 'package:card_transactions/presentation/widgets/week_label.dart';
@@ -39,12 +40,16 @@ class TransactionGraph extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MonthLabel(
                 startDate: startDate ?? DateTime.now(),
                 monthLabelVisiblityType: monthLabelVisiblityType,
                 fontSize: fontSize ?? 12),
             Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 WeekLabel(
                   weekLableVisiblityType: weekLableVisiblityType,
@@ -52,7 +57,7 @@ class TransactionGraph extends StatelessWidget {
                   size: size ?? 20,
                   margin: margin ?? 2,
                 ),
-                ..._buildWeeks()
+                Row(children: [..._buildWeeks()])
               ],
             ),
           ],
@@ -106,22 +111,25 @@ class TransactionGraph extends StatelessWidget {
         children: [
           ...List.generate(
             dayDifference < 7 ? dayDifference + 1 : dayDifference,
-            (index) => SingleDayTransaction(
-              key: Key(DateFormaters.toDDMMMYYYYObject(
-                      weekStartDate.copyWith(day: weekStartDate.day + index))
-                  .toString()),
-              date: weekStartDate.copyWith(day: weekStartDate.day + index),
-              maxTransactionPerDay: maxTransactionPerDay,
-              noTransactionColor: noTransactionColor,
-              baseColor: baseColor,
-
-              // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
-              transactions: transactionData[DateFormaters.toDDMMMYYYYObject(
-                    weekStartDate.copyWith(
-                      day: weekStartDate.day + index,
-                    ),
-                  )] ??
-                  [],
+            (index) => SingleDayTransactionAnimation(
+              animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+              dayDifferenceFromStart: day,
+              child: SingleDayTransaction(
+                key: Key(DateFormaters.toDDMMMYYYYObject(
+                        weekStartDate.copyWith(day: weekStartDate.day + index))
+                    .toString()),
+                date: weekStartDate.copyWith(day: weekStartDate.day + index),
+                maxTransactionPerDay: maxTransactionPerDay,
+                noTransactionColor: noTransactionColor,
+                baseColor: baseColor,
+                // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
+                transactions: transactionData[DateFormaters.toDDMMMYYYYObject(
+                      weekStartDate.copyWith(
+                        day: weekStartDate.day + index,
+                      ),
+                    )] ??
+                    [],
+              ),
             ),
           ),
 
@@ -129,10 +137,10 @@ class TransactionGraph extends StatelessWidget {
           if (dayDifference < 7)
             ...List.generate(
               7 - (dayDifference < 7 ? dayDifference + 1 : dayDifference),
-              (index) => Container(
-                height: 20,
-                width: 20,
-                margin: EdgeInsets.all(margin ?? 2),
+              (index) => SingleDayTransactionAnimation(
+                animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+                dayDifferenceFromStart: index,
+                child: emptyDay(),
               ),
             ),
         ],
@@ -149,34 +157,45 @@ class TransactionGraph extends StatelessWidget {
         // blank days, days not to display on UI
         ...List.generate(
           initialEmptyDays,
-          (index) => Container(
-            height: 20,
-            width: 20,
-            margin: EdgeInsets.all(margin ?? 2),
+          (index) => SingleDayTransactionAnimation(
+            animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+            dayDifferenceFromStart: index,
+            child: emptyDay(),
           ),
         ),
 
         // days to display on UI
         ...List.generate(
           7 - initialEmptyDays,
-          (index) => SingleDayTransaction(
-            key: Key(DateFormaters.toDDMMMYYYYObject(
-                    startDate.copyWith(day: startDate.day + index))
-                .toString()),
-            date: startDate.copyWith(day: startDate.day + index),
-            maxTransactionPerDay: maxTransactionPerDay,
-            noTransactionColor: noTransactionColor,
-            baseColor: baseColor,
-
-            // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
-            transactions: transactionData[
-                    DateFormaters.toDDMMMYYYYObject(startDate.copyWith(
-                  day: startDate.day + index,
-                ))] ??
-                [],
+          (index) => SingleDayTransactionAnimation(
+            animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+            dayDifferenceFromStart: index,
+            child: SingleDayTransaction(
+              key: Key(DateFormaters.toDDMMMYYYYObject(
+                      startDate.copyWith(day: startDate.day + index))
+                  .toString()),
+              date: startDate.copyWith(day: startDate.day + index),
+              maxTransactionPerDay: maxTransactionPerDay,
+              noTransactionColor: noTransactionColor,
+              baseColor: baseColor,
+              // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
+              transactions: transactionData[
+                      DateFormaters.toDDMMMYYYYObject(startDate.copyWith(
+                    day: startDate.day + index,
+                  ))] ??
+                  [],
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Container emptyDay() {
+    return Container(
+      height: size ?? 20,
+      width: size ?? 20,
+      margin: EdgeInsets.all(margin ?? 2),
     );
   }
 }
