@@ -18,6 +18,7 @@ class TransactionGraph extends StatelessWidget {
       this.margin = 2,
       this.baseColor,
       this.noTransactionColor,
+      this.verticleView = false,
       this.weekLableVisiblityType = WeekLableVisiblityType.all,
       this.monthLabelVisiblityType = MonthLabelVisiblityType.short});
 
@@ -27,6 +28,7 @@ class TransactionGraph extends StatelessWidget {
   final double? fontSize;
   final double? margin;
   final Color? noTransactionColor;
+  final bool verticleView;
   final Color? baseColor;
   final WeekLableVisiblityType weekLableVisiblityType;
   final MonthLabelVisiblityType monthLabelVisiblityType;
@@ -37,32 +39,64 @@ class TransactionGraph extends StatelessWidget {
       controller: scrollController,
       child: SingleChildScrollView(
         controller: scrollController,
-        scrollDirection: Axis.horizontal,
-        child: Column(
+        scrollDirection: verticleView ? Axis.vertical : Axis.horizontal,
+        child: verticleView ? _buildVertilceView() : _buildHorizontalView(),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalView() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MonthLabel(
+            startDate: startDate ?? DateTime.now(),
+            monthLabelVisiblityType: monthLabelVisiblityType,
+            size: size ?? 20,
+            verticalView: verticleView,
+            fontSize: fontSize ?? 12),
+        Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MonthLabel(
-                startDate: startDate ?? DateTime.now(),
-                monthLabelVisiblityType: monthLabelVisiblityType,
-                fontSize: fontSize ?? 12),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                WeekLabel(
-                  weekLableVisiblityType: weekLableVisiblityType,
-                  fontSize: fontSize ?? 12,
-                  size: size ?? 20,
-                  margin: margin ?? 2,
-                ),
-                Row(children: [..._buildWeeks()])
-              ],
+            WeekLabel(
+              weekLableVisiblityType: weekLableVisiblityType,
+              fontSize: fontSize ?? 12,
+              size: size ?? 20,
+              margin: margin ?? 2,
+              verticalView: verticleView,
             ),
+            Row(children: [..._buildWeeks()])
           ],
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget _buildVertilceView() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MonthLabel(
+            startDate: startDate ?? DateTime.now(),
+            monthLabelVisiblityType: monthLabelVisiblityType,
+            verticalView: verticleView,
+            size: size ?? 20,
+            fontSize: fontSize ?? 12),
+        Column(children: [
+          WeekLabel(
+            weekLableVisiblityType: weekLableVisiblityType,
+            fontSize: fontSize ?? 12,
+            verticalView: verticleView,
+            size: size ?? 20,
+            margin: margin ?? 2,
+          ),
+          ..._buildWeeks()
+        ])
+      ],
     );
   }
 
@@ -106,89 +140,113 @@ class TransactionGraph extends StatelessWidget {
           : aYearBack.copyWith(day: aYearBack.day + day + 7);
       int dayDifference = weekEndDate.difference(weekStartDate).inDays;
 
-      weeks.add(Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ...List.generate(
-            dayDifference < 7 ? dayDifference + 1 : dayDifference,
-            (index) => SingleDayTransactionAnimation(
-              animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
-              dayDifferenceFromStart: day,
-              child: SingleDayTransaction(
-                key: Key(DateFormaters.toDDMMMYYYYObject(
-                        weekStartDate.copyWith(day: weekStartDate.day + index))
-                    .toString()),
-                date: weekStartDate.copyWith(day: weekStartDate.day + index),
-                maxTransactionPerDay: maxTransactionPerDay,
-                noTransactionColor: noTransactionColor,
-                baseColor: baseColor,
-                // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
-                transactions: transactionData[DateFormaters.toDDMMMYYYYObject(
-                      weekStartDate.copyWith(
-                        day: weekStartDate.day + index,
-                      ),
-                    )] ??
-                    [],
-              ),
-            ),
-          ),
-
-          // black days to fill
-          if (dayDifference < 7)
-            ...List.generate(
-              7 - (dayDifference < 7 ? dayDifference + 1 : dayDifference),
-              (index) => SingleDayTransactionAnimation(
-                animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
-                dayDifferenceFromStart: index,
-                child: emptyDay(),
-              ),
-            ),
-        ],
-      ));
+      if (verticleView) {
+        weeks.add(Row(
+          mainAxisSize: MainAxisSize.min,
+          children: generateRestWeeks(
+              dayDifference, day, weekStartDate, maxTransactionPerDay),
+        ));
+      } else {
+        weeks.add(Column(
+          mainAxisSize: MainAxisSize.min,
+          children: generateRestWeeks(
+              dayDifference, day, weekStartDate, maxTransactionPerDay),
+        ));
+      }
     }
     return weeks;
   }
 
-  Widget _firstWeek(
-      int initialEmptyDays, DateTime startDate, double maxTransactionPerDay) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // blank days, days not to display on UI
+  List<Widget> generateRestWeeks(int dayDifference, int day,
+      DateTime weekStartDate, double maxTransactionPerDay) {
+    return [
+      ...List.generate(
+        dayDifference < 7 ? dayDifference + 1 : dayDifference,
+        (index) => SingleDayTransactionAnimation(
+          animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+          dayDifferenceFromStart: day,
+          child: SingleDayTransaction(
+            key: Key(DateFormaters.toDDMMMYYYYObject(
+                    weekStartDate.copyWith(day: weekStartDate.day + index))
+                .toString()),
+            date: weekStartDate.copyWith(day: weekStartDate.day + index),
+            maxTransactionPerDay: maxTransactionPerDay,
+            noTransactionColor: noTransactionColor,
+            baseColor: baseColor,
+            // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
+            transactions: transactionData[DateFormaters.toDDMMMYYYYObject(
+                  weekStartDate.copyWith(
+                    day: weekStartDate.day + index,
+                  ),
+                )] ??
+                [],
+          ),
+        ),
+      ),
+
+      // black days to fill
+      if (dayDifference < 7)
         ...List.generate(
-          initialEmptyDays,
+          7 - (dayDifference < 7 ? dayDifference + 1 : dayDifference),
           (index) => SingleDayTransactionAnimation(
             animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
             dayDifferenceFromStart: index,
             child: emptyDay(),
           ),
         ),
+    ];
+  }
 
-        // days to display on UI
-        ...List.generate(
-          7 - initialEmptyDays,
-          (index) => SingleDayTransactionAnimation(
-            animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
-            dayDifferenceFromStart: index,
-            child: SingleDayTransaction(
-              key: Key(DateFormaters.toDDMMMYYYYObject(
-                      startDate.copyWith(day: startDate.day + index))
-                  .toString()),
-              date: startDate.copyWith(day: startDate.day + index),
-              maxTransactionPerDay: maxTransactionPerDay,
-              noTransactionColor: noTransactionColor,
-              baseColor: baseColor,
-              // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
-              transactions: transactionData[
-                      DateFormaters.toDDMMMYYYYObject(startDate.copyWith(
-                    day: startDate.day + index,
-                  ))] ??
-                  [],
-            ),
+  List<Widget> generateFirstWeek(
+      int initialEmptyDays, DateTime startDate, double maxTransactionPerDay) {
+    return [
+      // blank days, days not to display on UI
+      ...List.generate(
+        initialEmptyDays,
+        (index) => SingleDayTransactionAnimation(
+          animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+          dayDifferenceFromStart: index,
+          child: emptyDay(),
+        ),
+      ),
+
+      // days to display on UI
+      ...List.generate(
+        7 - initialEmptyDays,
+        (index) => SingleDayTransactionAnimation(
+          animationUpToSize: (size ?? 20) + (margin ?? 2) * 2,
+          dayDifferenceFromStart: index,
+          child: SingleDayTransaction(
+            key: Key(DateFormaters.toDDMMMYYYYObject(
+                    startDate.copyWith(day: startDate.day + index))
+                .toString()),
+            date: startDate.copyWith(day: startDate.day + index),
+            maxTransactionPerDay: maxTransactionPerDay,
+            noTransactionColor: noTransactionColor,
+            baseColor: baseColor,
+            // Using [Map<DateTime,List<Transaction>>] object to fetch all the transactions done on a day
+            transactions: transactionData[
+                    DateFormaters.toDDMMMYYYYObject(startDate.copyWith(
+                  day: startDate.day + index,
+                ))] ??
+                [],
           ),
         ),
-      ],
-    );
+      ),
+    ];
+  }
+
+  Widget _firstWeek(
+      int initialEmptyDays, DateTime startDate, double maxTransactionPerDay) {
+    return verticleView
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: generateFirstWeek(
+                initialEmptyDays, startDate, maxTransactionPerDay))
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: generateFirstWeek(
+                initialEmptyDays, startDate, maxTransactionPerDay));
   }
 
   Container emptyDay() {

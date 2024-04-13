@@ -7,9 +7,14 @@ class TransactionController extends GetxController {
   Map<DateTime, List<Transaction>> transactions = {};
   var selectedDate = DateTime.now().obs;
   TransactionController({required this.mockApi});
-
+  var verticleView = false.obs;
   void updateSelecedDate(DateTime date) {
     selectedDate.value = date;
+  }
+
+  void updateViewAxis(bool value) {
+    verticleView.value = value;
+    update();
   }
 
   List<Transaction> getTransactionSelectedDate() {

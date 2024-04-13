@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/data/mock_apis.dart';
@@ -18,10 +20,33 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Center(
-                child: Card(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'Year History',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                    ),
+                    const Spacer(),
+                    const Text('Horizontel/Verticle'),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Obx(() => Switch(
+                          value: transactionController.verticleView.value,
+                          onChanged: (bool value) {
+                            transactionController.updateViewAxis(value);
+                          },
+                        )),
+                  ],
+                ),
+                Card(
                   elevation: 20,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -38,15 +63,21 @@ class HomePage extends StatelessWidget {
                               snapshot.data == null) {
                             return const Text("Someting went wrong");
                           }
-                          return TransactionGraph(
-                            transactionData: snapshot.data ?? {},
-                            key: const Key(Constants.GRAPH_Widget),
+                          return GetBuilder<TransactionController>(
+                            builder: (controller) {
+                              return TransactionGraph(
+                                transactionData: snapshot.data ?? {},
+                                key: const Key(Constants.GRAPH_Widget),
+                                verticleView: controller.verticleView.value,
+                                size: 20,
+                              );
+                            },
                           );
                         }),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

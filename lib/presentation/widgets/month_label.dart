@@ -7,10 +7,14 @@ class MonthLabel extends StatelessWidget {
       {super.key,
       required this.startDate,
       required this.monthLabelVisiblityType,
-      required this.fontSize});
+      required this.size,
+      required this.fontSize,
+      required this.verticalView});
   final DateTime startDate;
   final MonthLabelVisiblityType monthLabelVisiblityType;
   final double fontSize;
+  final double size;
+  final bool verticalView;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +25,43 @@ class MonthLabel extends StatelessWidget {
         monthLabelVisiblityType == MonthLabelVisiblityType.short
             ? Constants.SHORT_MONTH_LABEL
             : Constants.MONTH_LABEL;
+    if (verticalView) {
+      return _buildVerticleView(labels);
+    } else {
+      return _buildHorizontalView(labels);
+    }
+  }
+
+  Widget _buildVerticleView(List<String> labels) {
     return Padding(
-      padding: const EdgeInsets.only(left: 18.0),
+      padding: EdgeInsets.only(top: size),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: labels
+            .asMap()
+            // using asMap and Entreis to get index and value at the same time
+            .entries
+            .map(
+              (e) => SizedBox(
+                height: size * 5,
+                child: RotatedBox(
+                  quarterTurns: -1,
+                  child: Text(
+                    labels[(e.key + (startDate).month - 1) % 12],
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: fontSize),
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalView(List<String> labels) {
+    return Padding(
+      padding: EdgeInsets.only(left: size),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: labels
@@ -31,7 +70,7 @@ class MonthLabel extends StatelessWidget {
             .entries
             .map(
               (e) => SizedBox(
-                width: 105,
+                width: size * 5,
                 child: Text(
                   labels[(e.key + (startDate).month - 1) % 12],
                   textAlign: TextAlign.start,
