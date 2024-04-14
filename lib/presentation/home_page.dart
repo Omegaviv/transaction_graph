@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
 import 'package:card_transactions/constants.dart';
 import 'package:card_transactions/cotrollers/transaction_controller.dart';
 import 'package:card_transactions/data/mock_apis.dart';
 import 'package:card_transactions/domain/transaction.dart';
+import 'package:card_transactions/presentation/widgets/custom_animation.dart';
 import 'package:card_transactions/presentation/widgets/transaction_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,8 +24,15 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const Text(
+                  'Your Card',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 25),
+                  child: CreditCardPreviewAnimation(),
+                ),
                 Row(
-                  // mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     const Text(
                       'Year History',
@@ -34,7 +40,7 @@ class HomePage extends StatelessWidget {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                     ),
                     const Spacer(),
-                    const Text('Horizontel/Verticle'),
+                    const Text('Horizontal/Vertical'),
                     const SizedBox(
                       width: 20,
                     ),
