@@ -6,7 +6,7 @@
 </tr>
 <tr>
     <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/435dda4a-1c53-47f7-b1a7-95aeb122cbcc" height="700"></td>
-    <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/bff70bee-10d2-42e3-b096-66a56d978327" height="700"></td>
+    
 </tr>
 
 # Approach
