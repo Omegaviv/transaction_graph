@@ -1,19 +1,13 @@
 # card_transactions
 
-
-
-
 <tr>
-    <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/9bda73ae-3dce-47ab-91cf-81f9064b5c71" height="700"></td>
+    <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/a266a526-7f37-4072-b97a-30b2a589fb8b" height="700"></td>
     <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/a1360d2a-e071-40aa-a6f4-3d4412b97c3d" height="700"></td>
 </tr>
 <tr>
     <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/435dda4a-1c53-47f7-b1a7-95aeb122cbcc" height="700"></td>
     <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/bff70bee-10d2-42e3-b096-66a56d978327" height="700"></td>
 </tr>
-
-
-
 
 # Approach
 
