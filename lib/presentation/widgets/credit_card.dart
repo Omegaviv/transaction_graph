@@ -86,10 +86,13 @@ class CreditCard extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        SizedBox(
-          height: 50,
-          child: Image.asset(
-            'assets/scapia.png',
+        Opacity(
+          opacity: 0,
+          child: SizedBox(
+            height: 50,
+            child: Image.asset(
+              'assets/scapia.png',
+            ),
           ),
         )
       ],
