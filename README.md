@@ -1,7 +1,7 @@
 # card_transactions
 
 <tr>
-    <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/a266a526-7f37-4072-b97a-30b2a589fb8b" height="700"></td>
+    <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/c89a7662-bd69-4142-b22f-42189db940bf" height="700"></td>
     <td><img src="https://github.com/Omegaviv/transaction_graph/assets/86337946/a1360d2a-e071-40aa-a6f4-3d4412b97c3d" height="700"></td>
 </tr>
 <tr>
